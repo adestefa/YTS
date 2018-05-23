@@ -1,0 +1,116 @@
+<html>
+    <head>
+        <title>Youtube Speeder</title>
+        <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+        <link rel="icon" href="favicon.ico" type="image/x-icon">
+        <style>
+            BODY {
+                background-color:black;
+                color: white;
+            }
+            h1 { 
+                color:white;
+            }
+            .s {
+                font-size:24px;
+            }
+            span a {
+                font-size:24px;
+                color: white;
+                text-decoration:none;
+                padding:10px;
+            }
+            .border {
+                border:1px solid green;
+            }
+         </style>
+    </head>
+    <body>
+        <center>
+            <h1><a href="http://youtube.com/" target="_blank"><img onclick="logo()" style="border:0" src="imgs/yt.png" /></a> Speeder</h1>
+            <br /><br />
+            <form>
+                <span class="s">Video ID:</span>
+                <input type="text" class="s" size="15" id="vidid" name="vidid" />
+                <input type="button" class="s" value="Load" onclick="load(this.form.vidid.value)" />
+            </form>
+            <br /> <br />
+            <span>
+                <a class="speed" onclick="setSpeed(0.25, this);" id="s_0" href="javascript:void(0);">0.25</a>
+                <a class="speed" onclick="setSpeed(0.05, this)" id="s_1" href="javascript:void(0);">0.5</a>
+                <a class="speed" onclick="setSpeed(0.75, this)" id="s_2" href="javascript:void(0);">0.75</a>
+                <a class="speed" onclick="setSpeed(1, this)" id="s_3" href="javascript:void(0);">Normal</a>
+                <a class="speed" onclick="setSpeed(1.25, this)" id="s_4" href="javascript:void(0);">1.25</a>
+                <a class="speed" onclick="setSpeed(1.5, this)" id="s_5" href="javascript:void(0);">1.5</a>
+                <a class="speed border" onclick="setSpeed(2, this)" id="s_6" href="javascript:void(0);">2</a>
+            </span>
+            <br /> <br /> <br />
+            <div id="player"></div><br /><br /><br />
+           Watch on Youtube:<a target="_blank" id="thisvideo" style="color:white" href=""></a>
+        </center>
+        <script>
+            console.log("Youtube Speeder loading...");
+            var vidid = document.location.search;
+            console.log("Location:" + vidid);
+            if (vidid.indexOf("?v=") !== -1) {
+                vidid = document.location.search.split("?v=")[1];
+                console.log("Processing Location:" + vidid);
+                document.getElementById("vidid").value = vidid;
+                thisvideo(vidid);
+            } else {
+
+                vidid = 'M7lc1UVf-VE';
+                console.log("Error, no data found defaulting:" + vidid);
+            }
+           
+            // 2. This code loads the IFrame Player API code asynchronously. 
+            var tag = document.createElement('script');
+            tag.src = "https://www.youtube.com/iframe_api";
+            var firstScriptTag = document.getElementsByTagName('script')[0];
+            firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+            // 3. This function creates an <iframe> (and YouTube player)
+            //    after the API code downloads.
+            var player;
+            function onYouTubeIframeAPIReady() {
+                player = new YT.Player('player', {
+                    height: '390',
+                    width: '640',
+                    videoId: vidid,
+                    events: {
+                        'onReady': onPlayerReady
+                    }
+                });
+            }
+
+            // 4. The API will call this function when the video player is ready.
+            function onPlayerReady(event) {
+                player.setPlaybackRate(2);
+                event.target.playVideo();
+            }
+            
+            function logo() {
+                console.log("Logo clicked");
+            }
+
+            function load(id) {
+                var url = document.location.href.split("?")[0];
+                document.location.href= url + "?v=" + id;
+            }
+
+            function thisvideo(id) {
+                var url = "http://youtube.com/watch?v=" + id;
+                document.getElementById("thisvideo").href=url;
+                document.getElementById("thisvideo").text = url;
+            }
+
+            function setSpeed(speed, link){
+                for(var i=0;i<7;i++){
+                    document.getElementById("s_" + i).className = "";
+                }
+                player.setPlaybackRate(speed);
+                link.className="border";
+            }
+        </script>
+    </body>
+</html>
